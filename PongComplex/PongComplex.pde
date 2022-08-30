@@ -67,6 +67,17 @@ boolean[] keys;
 ///pontuacao///
 int pontoA=0, pontoB=0;
 
+///muda gravidade///
+PVector gravida = new PVector();
+boolean gravidaMesmo = false;
+boolean gravidadeMuda = false;
+int powerGravi = 3;//tamanho do powerup
+int timeGrav = 0;//timer
+int GravTime = 700;//limite do timer
+///background///
+int totaLinha = 20;
+float[] linha = new float[totaLinha];//
+float[] linhaV = new float[totaLinha];//
 
 void setup() {
   size(900, 500, P2D);//tela
@@ -97,6 +108,9 @@ void setup() {
   brick.x=random(bdis*5, width-bdis*5);
   brick.y=random(bdis, height-bdis);
 
+  gravida.x=random(bdis*5, width-bdis*5);
+  gravida.y=random(bdis, height-bdis);
+
   bx=random(bdis*5, width-bdis*5);//barras do meio
   by=height;
   bax=random(bdis*5, width-bdis*5);
@@ -106,7 +120,7 @@ void setup() {
     ammoA[i] = new PVector(0, 0);
     ammoB[i] = new PVector(0, 0);
   }
-  
+
   for (int i = 0; i< raboSize; i++) {//inicia rabo
     rabo[i] = new PVector(bolaPos.x, bolaPos.y);
   }
@@ -117,14 +131,18 @@ void setup() {
     brickAliveB[i] =  true;
   }
 
+  for (int i = 0; i < totaLinha; i++) {//inicia barede de tijolos
+    linha[i] = i*(height/totaLinha);
+    linhaV[i]=0;
+  }
+
   noFill();
   stroke(255);
 }
 
 void draw() {
-  //PVector grav = new PVector(0,0.1);
-  //bolaDir.add(grav);
   background(10);
+  gravida();
   powerUp();
   metralha();
   parede();
@@ -137,6 +155,50 @@ void draw() {
   desenhaBlackHole();
   keyAperta();
   UI();
+}
+
+void gravida() {
+  timeGrav++;
+  if ((timeGrav > GravTime) && !gravidadeMuda) {
+    timeGrav = 0;
+    gravidaMesmo = true;
+  }
+  if (gravidaMesmo) {
+    stroke(255, 0, 255);
+    circle(gravida.x, gravida.y, powerGravi*bolaS);
+    stroke(255);
+    if (dist(bolaPos.x, bolaPos.y, gravida.x, gravida.y) < powerGravi*bolaS) {
+      gravidadeMuda = true;
+      gravidaMesmo = false;
+      gravida.x=random(bdis*5, width-bdis*5);
+      gravida.y=random(bdis, height-bdis);
+    }
+  }
+
+  if (gravidadeMuda) {
+    PVector grav = new PVector(0, 0.1);
+    bolaDir.add(grav);
+    stroke(60, 0, 60);
+    for (int i = 0; i < totaLinha; i++) {//inicia barede de tijolos
+      linhaV[i]+=grav.y/2;
+      linha[i]+=linhaV[i];
+      line(0, linha[i], width, linha[i]);
+      if (linha[i] > height) {
+        linha[i] = -linhaV[i];
+        linhaV[i] = 0;
+      }
+    }
+  } else {
+    stroke(30, 0, 30);
+    for (int i = 0; i < totaLinha; i++) {//inicia barede de tijolos
+      line(0, linha[i], width, linha[i]);
+    }
+  }
+  int ki = int(height/totaLinha);
+  for (int i = 0; i < 2*ki; i++) {//inicia barede de tijolos
+    line(i*ki, 0, i*ki, height);
+  }
+  stroke(255);
 }
 
 
@@ -205,7 +267,7 @@ void colisaoDirecao() {
   } else if (colisaoEsq && keys[1]) {
     bolaDir.set(1, 1);
     bolaDir.setMag(v);
-  }else if (colisaoDir && keys[2]) {
+  } else if (colisaoDir && keys[2]) {
     bolaDir.set(-1, -1);
     bolaDir.setMag(v);
   } else if (colisaoDir && keys[3]) {

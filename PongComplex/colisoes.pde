@@ -55,6 +55,8 @@ void resets() {
   bbs = bs;
   comPowerUp = false;
   metralha = false;
+  gravidaMesmo=false;
+  gravidadeMuda = false;
   metralhaEsq = false;
   metralhaDir = false;
   bolaDir = PVector.random2D();
@@ -62,30 +64,34 @@ void resets() {
   bolaPos.x=width/2;
   bolaPos.y=height/2;
   blackSpawn();
+  for (int i = 0; i < totaLinha; i++) {//inicia barede de tijolos
+    linha[i] = i*(height/totaLinha);
+    linhaV[i]=0;
+  }
 }
 
-void brickReset(){
- for (int i = 0; i < brickAmount; i++) {
+void brickReset() {
+  for (int i = 0; i < brickAmount; i++) {
     brickAliveA[i] = true;
     brickAliveB[i] =  true;
-  } 
+  }
 }
 
-void brickResetA(){
- for (int i = 0; i < brickAmount; i++) {
+void brickResetA() {
+  for (int i = 0; i < brickAmount; i++) {
     brickAliveA[i] = true;
-  } 
+  }
 }
 
-void brickResetB(){
- for (int i = 0; i < brickAmount; i++) {
+void brickResetB() {
+  for (int i = 0; i < brickAmount; i++) {
     brickAliveB[i] =  true;
-  } 
+  }
 }
 
-void brickResetDois(){
- brickReset();
- muro=false;
- muroDir=false;
- muroEsq=false;
+void brickResetDois() {
+  brickReset();
+  muro=false;
+  muroDir=false;
+  muroEsq=false;
 }
