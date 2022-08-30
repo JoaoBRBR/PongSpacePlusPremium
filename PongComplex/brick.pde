@@ -1,5 +1,5 @@
 
-void parede() {
+void parede() {//logica da paredinha
 
   if (muroDir == true) {//direita
     fill(255, 255, 0);

@@ -17,7 +17,7 @@ void desenhaBlackHole() {
   if (blackG < 1) {
     blackG = 100;
   }
-  ///anti bleck
+  ///segundo bleck
   if (dist(bolaPos.x, bolaPos.y, antBH.x, antBH.y) < bhDis) {
     PVector grav = new PVector(antBH.x - bolaPos.x, antBH.y - bolaPos.y);
     grav.normalize();
@@ -31,7 +31,8 @@ void desenhaBlackHole() {
   circle(antBH.x, antBH.y, b);
 }
 
-void blackSpawn() {
+
+void blackSpawn() {//spawner dos buracos negros
   blackHole.x=random(bdis*5, width-bdis*5);
   blackHole.y=random(bdis, height-bdis);
 

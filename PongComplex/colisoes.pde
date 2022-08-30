@@ -1,12 +1,14 @@
 
 void colisaoBarras() {
   if (bolaPos.y > pa - bas/2 && bolaPos.y < pa + bas/2 && bolaPos.x < bdis + bthic/2 && bolaPos.x > bdis - bthic/2) {
+    bolaPos.x = bdis + bthic/2;
     bolaDir.x *= -1 ;
     colisaoEsq = true;
   } else {
     colisaoEsq = false;
   }
   if (bolaPos.y > pb - bbs/2 && bolaPos.y < pb + bbs/2 && bolaPos.x > width - bdis - bthic/2 && bolaPos.x < width - bdis + bthic/2) {
+    bolaPos.x = width - bdis - bthic/2;
     bolaDir.x *= -1 ;
     colisaoDir = true;
   } else {

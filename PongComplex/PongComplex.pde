@@ -1,65 +1,75 @@
-float pa=0, pb=0, bx=0, by=0, bax=0, bay=0;//players
-
+///sobre a bolinha///
 PVector bolaPos = new PVector(0, 0); //bola posição
 PVector bolaDir = new PVector(0, 0); //bola direção
-PVector blackHole = new PVector(0, 0);
-PVector antBH = new PVector(0, 0);
-PVector newDir = new PVector(0, 0);
+float v = 5;//velocidade bola
+int bolaS = 10;//bola tamanho
+
+
+///sobre as duas barrinhas////
+float pa=0, pb=0, bx=0, by=0, bax=0, bay=0;//players
+float qv = 6;//velocidade barra
+int bs = 60;//barra tamanho
+int bas = bs;//barra esq
+int bbs = bs;//barra dir
+int bdis = 40;//barra distancia da parede
+int bthic = 15;//barra groçura
+boolean colisaoEsq = false;//colisao na barra esquerda
+boolean colisaoDir = false;//colisao na barra direita
+
+///power ups///
+int powerGrow= 6, powerFire=4, powerBrick=2;//tamanhos dos powerUps
 PVector grow = new PVector(0, 0);
 PVector trow = new PVector(0, 0);
 PVector brick = new PVector(0, 0);
-
-int brickAmount=20;
-boolean[] brickAliveA = new boolean[brickAmount];
-boolean[] brickAliveB = new boolean[brickAmount];
+boolean comPowerUp = false;
+boolean muro = false;
+boolean muroEsq = false;
+boolean muroDir = false;
+//tudo da arma
+boolean metralha = false;
+boolean metralhaEsq = false;
+boolean metralhaDir = false;
+int guntime = 10;
+int timerDir = 0;
+int timerEsq = 0;
+int ka = 0;
+int kb = 0;
 int ammoQuant = 100;
 int tiroV=10;
 int tiroTiraVida=5;
-
 PVector[] ammoA = new PVector[ammoQuant];
 PVector[] ammoB = new PVector[ammoQuant];
+//bricks
+int brickAmount=20;
+boolean[] brickAliveA = new boolean[brickAmount];
+boolean[] brickAliveB = new boolean[brickAmount];
 
-int raboSize = 30;
-PVector[] rabo = new PVector[raboSize];
 
-float v = 5;//velocidade bola
-float qv = 6;//velocidade barra
-int bs = 60;//barra tamanho
-int bolaS = 10;//bola tamanho
-int bas = bs;
-int bbs = bs;
-int bdis = 40;//barra distancia da parede
-int bthic = 15;//barra groçura
+///buracos negros///
+PVector blackHole = new PVector(0, 0);
+PVector antBH = new PVector(0, 0);
+PVector newDir = new PVector(0, 0);
 float g = 5;//força gravidade
 float bhDis = 200;//campo de influencia
 float blackS = bhDis;//so pra animação do blackHole
 float blackG = blackS/2;//so pra animação do blackHole
 
-boolean comPowerUp = false;
-boolean metralha = false;
-boolean muro = false;
-boolean muroEsq = false;
-boolean muroDir = false;
-boolean metralhaEsq = false;
-boolean metralhaDir = false;
-boolean colisaoEsq = false;
-boolean colisaoDir = false;
 
+///rabinho da bola///
+int raboSize = 30;
+PVector[] rabo = new PVector[raboSize];
+
+
+///para teclas simultaneas///
 boolean[] keys;
-/////////////////////////////////////////////
 
-int guntime = 10;
-int timerDir = 0;
-int timerEsq = 0;
 
-int ka = 0;
-int kb = 0;
-
+///pontuacao///
 int pontoA=0, pontoB=0;
 
-int powerGrow= 6, powerFire=4, powerBrick=2;//tamanhos dos powerUps
+
 void setup() {
-  size(900, 500, P2D);//tamanho
+  size(900, 500, P2D);//tela
 
   keys=new boolean[4];//varias teclas
   keys[0]=false;
@@ -67,18 +77,18 @@ void setup() {
   keys[2]=false;
   keys[3]=false;
 
-  bolaPos.x=width/2;
+  bolaPos.x=width/2;//inicio da bola
   bolaPos.y=height/2;
 
-  bolaDir = PVector.random2D();
+  bolaDir = PVector.random2D();//direcao aleatoria
   bolaDir.setMag(v);
 
-  pa = height/2;
+  pa = height/2;//barras no meio
   pb = height/2;
 
-  blackSpawn();
+  blackSpawn();//spawnar buraco negro
 
-  grow.x=random(bdis*5, width-bdis*5);
+  grow.x=random(bdis*5, width-bdis*5);//power ups posicao aleatora
   grow.y=random(bdis, height-bdis);
 
   trow.x=random(bdis*5, width-bdis*5);
@@ -87,21 +97,22 @@ void setup() {
   brick.x=random(bdis*5, width-bdis*5);
   brick.y=random(bdis, height-bdis);
 
-  bx=random(bdis*5, width-bdis*5);
+  bx=random(bdis*5, width-bdis*5);//barras do meio
   by=height;
   bax=random(bdis*5, width-bdis*5);
   bay=height;
 
-  for (int i = 0; i< ammoQuant; i++) {
+  for (int i = 0; i< ammoQuant; i++) {//inicia municao
     ammoA[i] = new PVector(0, 0);
     ammoB[i] = new PVector(0, 0);
   }
-  for (int i = 0; i< raboSize; i++) {
+  
+  for (int i = 0; i< raboSize; i++) {//inicia rabo
     rabo[i] = new PVector(bolaPos.x, bolaPos.y);
   }
   rabo[0].set(bolaPos);
 
-  for (int i = 0; i < brickAmount; i++) {
+  for (int i = 0; i < brickAmount; i++) {//inicia barede de tijolos
     brickAliveA[i] = true;
     brickAliveB[i] =  true;
   }
@@ -128,6 +139,7 @@ void draw() {
   UI();
 }
 
+
 void UI() {
   textSize(width/20);
   text(pontoA, (width/2)-2*bdis, bdis);
@@ -136,6 +148,7 @@ void UI() {
     line(width/2, i, width/2, 10+i);
   }
 }
+
 
 void bola() {
   //rabo
@@ -146,9 +159,6 @@ void bola() {
     rabo[i].set(rabo[i-1]);
     circle(rabo[i].x, rabo[i].y, bolaS);
   }
-
-
-
 
   if (comPowerUp == true) {
     fill(0, 255, 0);
@@ -164,6 +174,7 @@ void bola() {
   noFill();
   bolaPos.add(bolaDir);
 }
+
 
 void desenhaBarras() {
   rectMode(CENTER);
@@ -186,6 +197,7 @@ void desenhaBarras() {
   }
 }
 
+
 void colisaoDirecao() {
   if (colisaoEsq && keys[0]) {
     bolaDir.set(1, -1);
@@ -201,6 +213,7 @@ void colisaoDirecao() {
     bolaDir.setMag(v);
   }
 }
+
 
 void keyPressed() {
   if (key =='r') {
