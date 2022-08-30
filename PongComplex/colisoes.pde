@@ -61,3 +61,29 @@ void resets() {
   bolaPos.y=height/2;
   blackSpawn();
 }
+
+void brickReset(){
+ for (int i = 0; i < brickAmount; i++) {
+    brickAliveA[i] = true;
+    brickAliveB[i] =  true;
+  } 
+}
+
+void brickResetA(){
+ for (int i = 0; i < brickAmount; i++) {
+    brickAliveA[i] = true;
+  } 
+}
+
+void brickResetB(){
+ for (int i = 0; i < brickAmount; i++) {
+    brickAliveB[i] =  true;
+  } 
+}
+
+void brickResetDois(){
+ brickReset();
+ muro=false;
+ muroDir=false;
+ muroEsq=false;
+}

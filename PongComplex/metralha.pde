@@ -2,6 +2,7 @@
 void metralha() {
 
   if (metralhaDir == true) {
+    stroke(255);
     colideAmmoA();
     for (int i = kb; i < ammoQuant-1; i++) {
       ammoB[i].x = width-bdis-10;
@@ -17,8 +18,9 @@ void metralha() {
         kb++;
       }
       ammoB[j].x-=tiroV;
-      stroke(0, 0, 255);
-      circle(ammoB[j].x, ammoB[j].y, 2);
+      strokeWeight(3);
+      point(ammoB[j].x, ammoB[j].y, 2);
+      strokeWeight(1);
       stroke(255);
     }
 
@@ -31,6 +33,7 @@ void metralha() {
 
 
   if (metralhaEsq == true) {
+    stroke(255);
     colideAmmoB();
     for (int i = ka; i < ammoQuant-1; i++) {
       ammoA[i].x = bdis+10;
@@ -46,8 +49,9 @@ void metralha() {
         ka++;
       }
       ammoA[j].x+=tiroV;
-      stroke(0, 0, 255);
-      circle(ammoA[j].x, ammoA[j].y, 2);
+      strokeWeight(3);
+      point(ammoA[j].x, ammoA[j].y, 2);
+      strokeWeight(1);
       stroke(255);
     }
 

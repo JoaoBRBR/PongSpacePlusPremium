@@ -22,11 +22,11 @@ void desenhaBlackHole() {
     PVector grav = new PVector(antBH.x - bolaPos.x, antBH.y - bolaPos.y);
     grav.normalize();
     grav.div(dist(antBH.x, antBH.y, bolaPos.x, bolaPos.y) / g);
-    bolaDir.sub(grav);
+    bolaDir.add(grav);
   }
   stroke(100);
-  float a = map(blackS, 1, 100, 100, 1);
-  float b = map(blackG, 1, 100, 100, 1);
+  float a = blackS;//map(blackS, 1, 100, 100, 1);
+  float b = blackG;//map(blackG, 1, 100, 100, 1);
   circle(antBH.x, antBH.y, a);
   circle(antBH.x, antBH.y, b);
 }

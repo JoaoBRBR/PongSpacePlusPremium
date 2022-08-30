@@ -7,7 +7,11 @@ PVector antBH = new PVector(0, 0);
 PVector newDir = new PVector(0, 0);
 PVector grow = new PVector(0, 0);
 PVector trow = new PVector(0, 0);
+PVector brick = new PVector(0, 0);
 
+int brickAmount=20;
+boolean[] brickAliveA = new boolean[brickAmount];
+boolean[] brickAliveB = new boolean[brickAmount];
 int ammoQuant = 100;
 int tiroV=10;
 int tiroTiraVida=5;
@@ -33,6 +37,9 @@ float blackG = blackS/2;//so pra animação do blackHole
 
 boolean comPowerUp = false;
 boolean metralha = false;
+boolean muro = false;
+boolean muroEsq = false;
+boolean muroDir = false;
 boolean metralhaEsq = false;
 boolean metralhaDir = false;
 boolean colisaoEsq = false;
@@ -50,8 +57,9 @@ int kb = 0;
 
 int pontoA=0, pontoB=0;
 
+int powerGrow= 6, powerFire=4, powerBrick=2;//tamanhos dos powerUps
 void setup() {
-  size(900, 500,P2D);//tamanho
+  size(900, 500, P2D);//tamanho
 
   keys=new boolean[4];//varias teclas
   keys[0]=false;
@@ -76,6 +84,9 @@ void setup() {
   trow.x=random(bdis*5, width-bdis*5);
   trow.y=random(bdis, height-bdis);
 
+  brick.x=random(bdis*5, width-bdis*5);
+  brick.y=random(bdis, height-bdis);
+
   bx=random(bdis*5, width-bdis*5);
   by=height;
   bax=random(bdis*5, width-bdis*5);
@@ -90,15 +101,24 @@ void setup() {
   }
   rabo[0].set(bolaPos);
 
+  for (int i = 0; i < brickAmount; i++) {
+    brickAliveA[i] = true;
+    brickAliveB[i] =  true;
+  }
+
   noFill();
   stroke(255);
 }
 
 void draw() {
+  //PVector grav = new PVector(0,0.1);
+  //bolaDir.add(grav);
   background(10);
   powerUp();
   metralha();
+  parede();
   bola();
+  colisaoDirecao();
   colisaoParede();
   colisaoBarras();
   desenhaBarras();
@@ -109,9 +129,9 @@ void draw() {
 }
 
 void UI() {
-  textSize(width/30);
-  text(pontoA, 2*bdis, bdis);
-  text(pontoB, width-2*bdis, bdis);
+  textSize(width/20);
+  text(pontoA, (width/2)-2*bdis, bdis);
+  text(pontoB, (width/2)+2*bdis+4, bdis);
   for (int i=0; i<height; i+=30) {
     line(width/2, i, width/2, 10+i);
   }
@@ -135,6 +155,8 @@ void bola() {
   } else
     if (metralha == true) {
       fill(255, 0, 0);
+    } else if (muro == true) {
+      fill(255, 255, 100);
     } else {
       fill(255);
     }
@@ -164,14 +186,31 @@ void desenhaBarras() {
   }
 }
 
-void keyPressed() {
-  if(key =='r'){
-   resets();
-   pontoA=0;
-   pontoB=0;
+void colisaoDirecao() {
+  if (colisaoEsq && keys[0]) {
+    bolaDir.set(1, -1);
+    bolaDir.setMag(v);
+  } else if (colisaoEsq && keys[1]) {
+    bolaDir.set(1, 1);
+    bolaDir.setMag(v);
+  }else if (colisaoDir && keys[2]) {
+    bolaDir.set(-1, -1);
+    bolaDir.setMag(v);
+  } else if (colisaoDir && keys[3]) {
+    bolaDir.set(-1, 1);
+    bolaDir.setMag(v);
   }
-  if(key =='t'){
-   resets();
+}
+
+void keyPressed() {
+  if (key =='r') {
+    resets();
+    brickResetDois();
+    pontoA=0;
+    pontoB=0;
+  }
+  if (key =='t') {
+    resets();
   }
   if (key=='w')
     keys[0]=true;
