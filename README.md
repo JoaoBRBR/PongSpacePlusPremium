@@ -2,7 +2,7 @@
 a weird pong game
 r to restart the game
 t to reset boll's position in case it gets stuck.
-There is the processing code and windoes executable.
+There is the processing code and windows executable.
 
 
 Codigo feito no processing, e tem um executável.
